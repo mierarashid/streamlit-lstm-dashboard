@@ -87,16 +87,21 @@ if uploaded_file is not None:
         
         with tab2:
             st.subheader("🔮 Predictions")
-            
+    
             if st.button("Generate Predictions"):
                 # Extract features for prediction
                 features_df = input_df[features]
-                
-                # Scale the input data
+        
+                # Fit and transform the input data
+                X_scaler.fit(features_df)  # Add this line to fit the scaler
                 input_scaled = X_scaler.transform(features_df)
-                
+        
+                # Fit and transform the target variable
+                y_data = input_df[target_variable].values.reshape(-1, 1)
+                y_scaler.fit(y_data)  # Add this line to fit the scaler
+        
                 # Reshape for LSTM
-                input_lstm = input_scaled.reshape((input_scaled.shape[0], 1, input_scaled.shape[1]))
+                input_lstm = input_scaled.reshape((input_scaled.shape[0], 1, input_scaled.shape[1])))
                 
                 # Make predictions
                 predictions = model.predict(input_lstm)
