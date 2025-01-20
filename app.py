@@ -272,7 +272,34 @@ def main():
             with tab2:
                 st.subheader("🔮 Predictions")
                 
+                # Add prediction options
+                prediction_type = st.radio(
+                    "Select Prediction Type",
+                    ["Current Data", "Future Forecast (7 Days)", "Future Forecast (30 Days)"]
+                )
+                
                 if st.button("Generate Predictions"):
+                    # Function to generate future dates
+                    def generate_future_features(last_row, num_days):
+                        future_dates = pd.date_range(start=input_df[DATE_COLUMN].iloc[-1] + pd.Timedelta(days=1), 
+                                                   periods=num_days, freq='D')
+                        
+                        # Create future features based on the last available data
+                        future_data = []
+                        for _ in range(num_days):
+                            # Copy the last row's features as a baseline
+                            new_row = last_row.copy()
+                            
+                            # Update time-based features
+                            new_row['day_of_week'] = future_dates[_].dayofweek
+                            new_row['is_weekend'] = 1 if future_dates[_].dayofweek >= 5 else 0
+                            new_row['month'] = future_dates[_].month
+                            
+                            future_data.append(new_row)
+                            
+                        return pd.DataFrame(future_data), future_dates
+                    
+                    # Get predictions based on selected type
                     features_df = input_df[FEATURES]
                     X_scaler.fit(features_df)
                     input_scaled = X_scaler.transform(features_df)
@@ -280,15 +307,43 @@ def main():
                     y_data = input_df[TARGET_VARIABLE].values.reshape(-1, 1)
                     y_scaler.fit(y_data)
                     
-                    input_lstm = input_scaled.reshape((input_scaled.shape[0], 1, input_scaled.shape[1]))
-                    predictions = model.predict(input_lstm)
-                    final_predictions = y_scaler.inverse_transform(predictions)
-                    
-                    results_df = pd.DataFrame({
-                        'Date': input_df[DATE_COLUMN],
-                        'Actual': input_df[TARGET_VARIABLE].values,
-                        'Predicted': final_predictions.flatten()
-                    })
+                    if prediction_type == "Current Data":
+                        input_lstm = input_scaled.reshape((input_scaled.shape[0], 1, input_scaled.shape[1]))
+                        predictions = model.predict(input_lstm)
+                        final_predictions = y_scaler.inverse_transform(predictions)
+                        
+                        results_df = pd.DataFrame({
+                            'Date': input_df[DATE_COLUMN],
+                            'Actual': input_df[TARGET_VARIABLE].values,
+                            'Predicted': final_predictions.flatten()
+                        })
+                    else:
+                        # Get number of days to forecast
+                        num_days = 7 if "7 Days" in prediction_type else 30
+                        
+                        # Generate future features
+                        last_row = features_df.iloc[-1]
+                        future_features_df, future_dates = generate_future_features(last_row, num_days)
+                        
+                        # Scale future features
+                        future_scaled = X_scaler.transform(future_features_df)
+                        future_lstm = future_scaled.reshape((future_scaled.shape[0], 1, future_scaled.shape[1]))
+                        
+                        # Get predictions for current data
+                        current_lstm = input_scaled.reshape((input_scaled.shape[0], 1, input_scaled.shape[1]))
+                        current_predictions = model.predict(current_lstm)
+                        current_predictions = y_scaler.inverse_transform(current_predictions)
+                        
+                        # Get predictions for future data
+                        future_predictions = model.predict(future_lstm)
+                        future_predictions = y_scaler.inverse_transform(future_predictions)
+                        
+                        # Combine current and future predictions
+                        results_df = pd.DataFrame({
+                            'Date': list(input_df[DATE_COLUMN]) + list(future_dates),
+                            'Actual': list(input_df[TARGET_VARIABLE].values) + [None] * num_days,
+                            'Predicted': list(current_predictions.flatten()) + list(future_predictions.flatten())
+                        })
                     
                     st.write("### Prediction Results")
                     st.dataframe(results_df)
