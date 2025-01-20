@@ -33,9 +33,9 @@ st.sidebar.title("Navigation")
 page = st.sidebar.selectbox("Choose a page", ["Overview", "Make Predictions", "Model Performance", "Data Analysis"])
 
 if page == "Overview":
-    st.title("EV Charging Sessions Prediction Dashboard")
+    st.title("EV Energy Demand Prediction Dashboard")
     st.write("""
-    This dashboard provides tools to predict the number of EV charging sessions based on historical data. 
+    This dashboard provides tools to predict the energy demand of EVs based on historical data. 
     The model takes into account various features including:
     - GHG savings
     - Charging duration
