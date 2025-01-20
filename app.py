@@ -20,12 +20,14 @@ st.markdown("""
         background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);
     }
     
-    
-    .sub-text {
-        color: #64748B;
-        font-size: 1.1rem;
-        line-height: 1.5;
+        .main-title {
+        color: #1E293B;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
     }
+
+
     
     /* Upload section styling */
     .upload-section {
