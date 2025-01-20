@@ -6,6 +6,13 @@ import plotly.graph_objects as go
 from tensorflow.keras.models import load_model
 import joblib
 
+# Must be the first Streamlit command
+st.set_page_config(
+    page_title="EV Energy Dashboard",
+    page_icon="📈",
+    layout="wide"
+)
+
 def setup_page():
     """Configure the page settings and apply custom styling."""
     st.set_page_config(
