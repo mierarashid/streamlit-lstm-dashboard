@@ -180,27 +180,6 @@ elif page == "Make Predictions":
         file_name="template.csv",
         mime="text/csv"
     )
-    # Add example template
-    st.markdown("---")
-    st.subheader("CSV Template")
-    st.write("Your CSV should have the following columns:")
-    
-    # Create a sample dataframe with your features
-    sample_df = pd.DataFrame(columns=['feature1', 'feature2', 'feature3'])  # Replace with your actual features
-    st.dataframe(sample_df)
-    
-    # Add download template button
-    @st.cache_data
-    def convert_df_to_csv(df):
-        return df.to_csv(index=False)
-    
-    csv_template = convert_df_to_csv(sample_df)
-    st.download_button(
-        label="Download CSV Template",
-        data=csv_template,
-        file_name="template.csv",
-        mime="text/csv"
-    )
 
 elif page == "Model Performance":
     st.title("Model Performance Metrics")
