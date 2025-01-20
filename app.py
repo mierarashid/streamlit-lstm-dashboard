@@ -20,12 +20,6 @@ st.markdown("""
         background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);
     }
     
-    .main-title {
-        color: #1E293B;
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-    }
     
     .sub-text {
         color: #64748B;
