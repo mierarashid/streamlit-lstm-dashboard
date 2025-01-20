@@ -20,7 +20,6 @@ st.markdown("""
         background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);
     }
 
-    
 
     
     /* Data preview section */
