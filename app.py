@@ -113,7 +113,13 @@ if uploaded_file is not None:
                     'Actual': input_df[target_variable].values,
                     'Predicted': final_predictions.flatten()
                 })
-                
+
+                # Create results dataframe and store in session state
+                st.session_state.results_df = pd.DataFrame({
+                    'Date': input_df[date_column],
+                    'Actual': input_df[target_variable].values,
+                    'Predicted': final_predictions.flatten()
+                })
                 # Display results
                 st.write("### Prediction Results")
                 st.dataframe(results_df)
@@ -159,37 +165,37 @@ if uploaded_file is not None:
         
         with tab3:
             st.subheader("📈 Model Performance")
-            
-            if 'Predicted' in locals():
+    
+            if 'results_df' in st.session_state:
                 # Calculate performance metrics
-                mae = np.mean(np.abs(results_df['Actual'] - results_df['Predicted']))
-                mse = np.mean((results_df['Actual'] - results_df['Predicted'])**2)
-                r2 = 1 - (np.sum((results_df['Actual'] - results_df['Predicted'])**2) / 
-                         np.sum((results_df['Actual'] - np.mean(results_df['Actual']))**2))
-                
-                # Display metrics
-                col1, col2, col3 = st.columns(3)
-                with col1:
-                    st.metric("Mean Absolute Error", f"{mae:.3f}")
-                with col2:
-                    st.metric("Mean Squared Error", f"{mse:.3f}")
-                with col3:
-                    st.metric("R² Score", f"{r2:.3f}")
-                
-                # Additional performance visualizations
-                st.write("### Residual Analysis")
-                results_df['Residuals'] = results_df['Actual'] - results_df['Predicted']
-                
-                fig_residuals = px.scatter(
-                    results_df,
-                    x='Predicted',
-                    y='Residuals',
-                    title='Residual Plot'
-                )
-                fig_residuals.add_hline(y=0, line_dash="dash", line_color="red")
-                st.plotly_chart(fig_residuals, use_container_width=True)
-            else:
-                st.info("Generate predictions first to see model performance metrics.")
+                mae = np.mean(np.abs(st.session_state.results_df['Actual'] - st.session_state.results_df['Predicted']))
+                mse = np.mean((st.session_state.results_df['Actual'] - st.session_state.results_df['Predicted'])**2)
+                r2 = 1 - (np.sum((st.session_state.results_df['Actual'] - st.session_state.results_df['Predicted'])**2) / 
+                     np.sum((st.session_state.results_df['Actual'] - np.mean(st.session_state.results_df['Actual']))**2))
+        
+            # Display metrics
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric("Mean Absolute Error", f"{mae:.3f}")
+            with col2:
+                st.metric("Mean Squared Error", f"{mse:.3f}")
+            with col3:
+                st.metric("R² Score", f"{r2:.3f}")
+        
+            # Additional performance visualizations
+            st.write("### Residual Analysis")
+            st.session_state.results_df['Residuals'] = st.session_state.results_df['Actual'] - st.session_state.results_df['Predicted']
+        
+            fig_residuals = px.scatter(
+                st.session_state.results_df,
+                x='Predicted',
+                y='Residuals',
+                title='Residual Plot'
+            )
+            fig_residuals.add_hline(y=0, line_dash="dash", line_color="red")
+            st.plotly_chart(fig_residuals, use_container_width=True)
+        else:
+            st.info("Generate predictions first to see model performance metrics.")
 
     except Exception as e:
         st.error(f"Error processing the file: {str(e)}")
