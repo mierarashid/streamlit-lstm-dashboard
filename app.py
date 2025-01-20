@@ -13,6 +13,105 @@ st.set_page_config(
     layout="wide"
 )
 
+st.markdown("""
+    <style>
+    /* Main background and text colors */
+    .stApp {
+        background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);
+    }
+    
+    /* Header styling */
+    .main-header {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+    }
+    
+    .main-title {
+        color: #1E293B;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    
+    .sub-text {
+        color: #64748B;
+        font-size: 1.1rem;
+        line-height: 1.5;
+    }
+    
+    /* Upload section styling */
+    .upload-section {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+    }
+    
+    /* Data preview section */
+    .stDataFrame {
+        background: white;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    /* Tab styling */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 24px;
+        background-color: white;
+        padding: 0.5rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        color: #64748B;
+        font-weight: 500;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        color: #2563EB;
+        border-bottom-color: #2563EB;
+    }
+    
+    /* Button styling */
+    .stButton > button {
+        background-color: #2563EB;
+        color: white;
+        border-radius: 6px;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        border: none;
+        box-shadow: 0 2px 4px rgba(37,99,235,0.2);
+        transition: all 0.2s ease;
+    }
+    
+    .stButton > button:hover {
+        background-color: #1E40AF;
+        box-shadow: 0 4px 6px rgba(37,99,235,0.3);
+    }
+    
+    /* File uploader styling */
+    [data-testid="stFileUploader"] {
+        background-color: white;
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# Wrap the title and description in styled divs
+st.markdown('<div class="main-header">', unsafe_allow_html=True)
+st.markdown('<h1 class="main-title">EV Energy Demand Analysis & Prediction Dashboard</h1>', unsafe_allow_html=True)
+st.markdown('<p class="sub-text">This dashboard provides tools to analyze your EV charging data and predict future energy demand. Upload your data below to get started.</p>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
+
+
 # Define your features and target
 date_column = 'date' 
 features = ['total_ghg_savings', 'total_charging_sec', '7_rolling_avg', '30_rolling_avg', 
@@ -31,15 +130,21 @@ def load_saved_model():
 model, X_scaler, y_scaler = load_saved_model()
 
 # Main title
-st.title("EV Energy Demand Analysis & Prediction Dashboard")
-st.write("""
-This dashboard provides tools to analyze your EV charging data and predict future energy demand. 
-Upload your data below to get started.
-""")
+#st.title("EV Energy Demand Analysis & Prediction Dashboard")
+#st.write("""
+#This dashboard provides tools to analyze your EV charging data and predict future energy demand. 
+#Upload your data below to get started.
+#""")
+
+# Wrap the upload section in a styled div
+st.markdown('<div class="upload-section">', unsafe_allow_html=True)
+st.subheader("📤 Upload Your Data")
+uploaded_file = st.file_uploader("Upload a CSV file", type=['csv'])
+st.markdown('</div>', unsafe_allow_html=True)
 
 # File upload section
-st.subheader("Upload Your Data")
-uploaded_file = st.file_uploader("Upload a CSV file", type=['csv'])
+# st.subheader("Upload Your Data")
+# uploaded_file = st.file_uploader("Upload a CSV file", type=['csv'])
 
 if uploaded_file is not None:
     try:
