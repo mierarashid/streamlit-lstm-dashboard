@@ -104,7 +104,7 @@ st.markdown("""
 # Wrap the title and description in styled divs
 # Main title and description
 st.markdown('<div class="dashboard-title">EV Energy Demand Analysis & Prediction Dashboard</div>', unsafe_allow_html=True)
-st.markdown('<div class="dashboard-subtitle">This dashboard provides tools to analyze your EV charging data and predict future energy demand. Upload your data below to get started.</div>', unsafe_allow_html=True)
+st.markdown('<div class="dashboard-subtitle">This dashboard provides tools to analyze your EV charging data and predict future energy demand. </div>', unsafe_allow_html=True)
 
 
 # Define your features and target
