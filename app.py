@@ -52,6 +52,22 @@ if uploaded_file is not None:
         
         # Create tabs for different analyses
         tab1, tab2 = st.tabs(["Data Analysis", "Predictions"])
+
+        st.markdown("""
+            <style>
+            .stTabs [data-baseweb="tab-list"] {
+                gap: 24px;
+            }
+            .stTabs [data-baseweb="tab"] {
+                color: #707070;
+                padding: 0 24px;
+            }
+            .stTabs [aria-selected="true"] {
+                color: #1E88E5;
+                border-bottom-color: #1E88E5;
+            }
+            </style>
+        """, unsafe_allow_html=True)
         
         with tab1:
             st.subheader("📊 Data Analysis")
