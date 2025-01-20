@@ -15,18 +15,80 @@ st.set_page_config(
 
 st.markdown("""
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+    
     /* Main background and text colors */
     .stApp {
-        background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);
+        background-color: #f0f2f6;
+        font-family: 'Roboto', sans-serif;
     }
-
-
     
-    /* Data preview section */
-    .stDataFrame {
-        background: white;
+    /* Dashboard title styling */
+    .dashboard-title {
+        font-family: 'Roboto', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1a237e;
+        text-align: center;
+        padding: 1.5rem 0;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+    }
+    
+    .dashboard-subtitle {
+        font-family: 'Roboto', sans-serif;
+        font-size: 1.1rem;
+        color: #424242;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    /* Section titles */
+    h2, h3 {
+        font-family: 'Roboto', sans-serif;
+        color: #1a237e;
+        font-weight: 500;
+        padding: 1rem 0;
+    }
+    
+    /* Card styling for content sections */
+    .content-card {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+    }
+    
+    /* Plot container styling */
+    .plot-container {
+        background-color: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin: 1rem 0;
+    }
+    
+    /* Metric containers */
+    div[data-testid="metric-container"] {
+        background-color: white;
+        border: 1px solid #e0e0e0;
         padding: 1rem;
         border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    div[data-testid="metric-container"] > div:first-child {
+        color: #1a237e;
+    }
+    
+    /* File uploader styling */
+    [data-testid="stFileUploader"] {
+        background-color: white;
+        padding: 1.5rem;
+        border-radius: 10px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     
@@ -34,48 +96,27 @@ st.markdown("""
     .stTabs [data-baseweb="tab-list"] {
         gap: 24px;
         background-color: white;
-        padding: 0.5rem;
+        padding: 0.5rem 1rem;
         border-radius: 10px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     
     .stTabs [data-baseweb="tab"] {
-        color: #64748B;
+        color: #424242;
         font-weight: 500;
     }
     
     .stTabs [aria-selected="true"] {
-        color: #2563EB;
-        border-bottom-color: #2563EB;
-    }
-    
-    /* Button styling */
-    .stButton > button {
-        background-color: #2563EB;
-        color: white;
-        border-radius: 6px;
-        padding: 0.5rem 1rem;
-        font-weight: 500;
-        border: none;
-        box-shadow: 0 2px 4px rgba(37,99,235,0.2);
-        transition: all 0.2s ease;
-    }
-    
-    /* File uploader styling */
-    [data-testid="stFileUploader"] {
-        background-color: white;
-        padding: 1rem;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        color: #1a237e;
+        border-bottom-color: #1a237e;
     }
     </style>
 """, unsafe_allow_html=True)
 
 # Wrap the title and description in styled divs
-st.markdown('<div class="main-header">', unsafe_allow_html=True)
-st.markdown('<h1 class="main-title">EV Energy Demand Analysis & Prediction Dashboard</h1>', unsafe_allow_html=True)
-st.markdown('<p class="sub-text">This dashboard provides tools to analyze your EV charging data and predict future energy demand. Upload your data below to get started.</p>', unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)
+# Main title and description
+st.markdown('<div class="dashboard-title">EV Energy Demand Analysis & Prediction Dashboard</div>', unsafe_allow_html=True)
+st.markdown('<div class="dashboard-subtitle">This dashboard provides tools to analyze your EV charging data and predict future energy demand. Upload your data below to get started.</div>', unsafe_allow_html=True)
 
 
 # Define your features and target
@@ -103,8 +144,8 @@ model, X_scaler, y_scaler = load_saved_model()
 #""")
 
 # Wrap the upload section in a styled div
-st.markdown('<div class="upload-section">', unsafe_allow_html=True)
-st.subheader("Upload Your Data")
+st.markdown('<div class="content-card">', unsafe_allow_html=True)
+st.subheader("Upload Data")
 uploaded_file = st.file_uploader("Upload a CSV file", type=['csv'])
 st.markdown('</div>', unsafe_allow_html=True)
 
