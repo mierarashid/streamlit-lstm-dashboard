@@ -288,143 +288,152 @@ if uploaded_file is not None:
                     mime="text/csv"
                 )
                 
-                # Visualization
-                col1, col2 = st.columns(2)
-                
-                with col1:
-                    st.write("### Time Series Comparison")
-                    fig_time = px.line(results_df,
-                                     x='Date',
-                                     y=['Actual', 'Predicted'],
-                                     template='plotly_white',
-                                     labels={'value': 'Energy Consumption (kWh)', 
-                                             'Date': 'Date',
-                                             'variable': 'Type'},
-                                     color_discrete_map={'Actual': '#1E88E5', 'Predicted': '#FFC107'}
-                    )
+# Create the visualizations
+col1, col2 = st.columns(2)
 
-                    fig_time.update_layout(
-                        title={
-                            'text': 'Energy Consumption: Actual vs Predicted',
-                            'y': 0.95,
-                            'x': 0.5,
-                            'xanchor': 'center',
-                            'yanchor': 'top',
-                            'font': dict(size=20, color='#1a237e')
-                        },
-                        plot_bgcolor='white',
-                        paper_bgcolor='white',
-                        legend=dict(
-                            orientation="h",
-                            yanchor="bottom",
-                            y=1.02,
-                            xanchor="center",
-                            x=0.5,
-                            bgcolor='rgba(255, 255, 255, 0.8)',
-                            bordercolor='#E0E0E0',
-                            borderwidth=1,
-                            font=dict(size=12)
-                        ),
-                        margin=dict(l=60, r=30, t=100, b=50),
-                        hovermode='x unified',
-                        xaxis=dict(
-                            title='Date',
-                            gridcolor='#EEEEEE',
-                            showgrid=True,
-                            zeroline=False,
-                            title_font=dict(size=14, color='#424242'),
-                            tickfont=dict(size=12)
-                        ),
-                        yaxis=dict(
-                            title='Energy Consumption (kWh)',
-                            gridcolor='#EEEEEE',
-                            showgrid=True,
-                            zeroline=False,
-                            title_font=dict(size=14, color='#424242'),
-                            tickfont=dict(size=12)
-                        )
-                    )
+with col1:
+    st.markdown('<div class="plot-container">', unsafe_allow_html=True)
+    st.write("### Time Series Comparison")
+    fig_time = px.line(results_df,
+        x='Date',
+        y=['Actual', 'Predicted'],
+        template='plotly_white',
+        labels={'value': 'Energy Consumption (kWh)', 
+                'Date': 'Date',
+                'variable': 'Type'},
+        color_discrete_map={'Actual': '#1E88E5', 'Predicted': '#FFC107'}
+    )
 
-                # Add hover template
-                fig_time.update_traces(
-                    hovertemplate="<b>%{y:.1f} kWh</b><br>Date: %{x|%Y-%m-%d}<extra></extra>"
-                )
+    fig_time.update_layout(
+        title={
+            'text': 'Energy Consumption: Actual vs Predicted',
+            'y': 0.95,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': dict(size=20, color='#1a237e')
+        },
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="center",
+            x=0.5,
+            bgcolor='rgba(255, 255, 255, 0.8)',
+            bordercolor='#E0E0E0',
+            borderwidth=1,
+            font=dict(size=12)
+        ),
+        margin=dict(l=60, r=30, t=100, b=50),
+        hovermode='x unified',
+        xaxis=dict(
+            title='Date',
+            gridcolor='#EEEEEE',
+            showgrid=True,
+            zeroline=False,
+            title_font=dict(size=14, color='#424242'),
+            tickfont=dict(size=12)
+        ),
+        yaxis=dict(
+            title='Energy Consumption (kWh)',
+            gridcolor='#EEEEEE',
+            showgrid=True,
+            zeroline=False,
+            title_font=dict(size=14, color='#424242'),
+            tickfont=dict(size=12)
+        )
+    )
 
+    # Add hover template
+    fig_time.update_traces(
+        hovertemplate="<b>%{y:.1f} kWh</b><br>Date: %{x|%Y-%m-%d}<extra></extra>"
+    )
+    
+    # Display time series plot
+    st.plotly_chart(fig_time, use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-                with col2:
-                    st.write("### Prediction Correlation")
-                    fig_scatter = px.scatter(results_df,
-                                           x='Actual',
-                                           y='Predicted',
-                                           template='plotly_white',
-                                           labels={'Actual': 'Actual Energy Consumption (kWh)', 
-                                                   'Predicted': 'Predicted Energy Consumption (kWh)'}
-                                            )
-                    
-                    # Add perfect prediction line
-                    fig_scatter.add_trace(
-                        go.Scatter(
-                            x=[results_df['Actual'].min(), results_df['Actual'].max()],
-                            y=[results_df['Actual'].min(), results_df['Actual'].max()],
-                            mode='lines',
-                            name='Perfect Prediction',
-                            line=dict(dash='dash', color='red')
-                        )
-                    )
-                    fig_scatter.update_layout(
-                        title={
-                            'text': 'Prediction Accuracy Analysis',
-                            'y': 0.95,
-                            'x': 0.5,
-                            'xanchor': 'center',
-                            'yanchor': 'top',
-                            'font': dict(size=20, color='#1a237e')
-                        },
-                        plot_bgcolor='white',
-                        paper_bgcolor='white',
-                        legend=dict(
-                            orientation="h",
-                            yanchor="bottom",
-                            y=1.02,
-                            xanchor="center",
-                            x=0.5,
-                            bgcolor='rgba(255, 255, 255, 0.8)',
-                            bordercolor='#E0E0E0',
-                            borderwidth=1,
-                            font=dict(size=12)
-                        ),
-                        margin=dict(l=60, r=30, t=100, b=50),
-                        showlegend=True,
-                        xaxis=dict(
-                            title='Actual Energy Consumption (kWh)',
-                            gridcolor='#EEEEEE',
-                            showgrid=True,
-                            zeroline=False,
-                            title_font=dict(size=14, color='#424242'),
-                            tickfont=dict(size=12)
-                        ),
-                        yaxis=dict(
-                            title='Predicted Energy Consumption (kWh)',
-                            gridcolor='#EEEEEE',
-                            showgrid=True,
-                            zeroline=False,
-                            title_font=dict(size=14, color='#424242'),
-                            tickfont=dict(size=12)
-                        )
-                    )
-                    # Display plots in columns with proper styling
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        st.markdown('<div class="plot-container">', unsafe_allow_html=True)
-                        st.plotly_chart(fig_time, use_container_width=True)
-                        st.markdown('</div>', unsafe_allow_html=True)
-                        
-                    with col2:
-                        st.markdown('<div class="plot-container">', unsafe_allow_html=True)
-                        st.plotly_chart(fig_scatter, use_container_width=True)
-                        st.markdown('</div>', unsafe_allow_html=True)
+with col2:
+    st.markdown('<div class="plot-container">', unsafe_allow_html=True)
+    st.write("### Prediction Correlation")
+    fig_scatter = px.scatter(results_df,
+        x='Actual',
+        y='Predicted',
+        template='plotly_white',
+        labels={'Actual': 'Actual Energy Consumption (kWh)', 
+                'Predicted': 'Predicted Energy Consumption (kWh)'}
+    )
+    
+    # Add perfect prediction line
+    fig_scatter.add_trace(
+        go.Scatter(
+            x=[results_df['Actual'].min(), results_df['Actual'].max()],
+            y=[results_df['Actual'].min(), results_df['Actual'].max()],
+            mode='lines',
+            name='Perfect Prediction',
+            line=dict(dash='dash', color='#FF5252', width=2)
+        )
+    )
 
-                    #st.plotly_chart(fig_scatter, use_container_width=True)
+    # Update scatter plot markers
+    fig_scatter.update_traces(
+        marker=dict(
+            size=8,
+            color='#1E88E5',
+            opacity=0.6,
+            line=dict(width=1, color='#1565C0')
+        ),
+        selector=dict(mode='markers'),
+        hovertemplate="<b>Actual:</b> %{x:.1f} kWh<br><b>Predicted:</b> %{y:.1f} kWh<extra></extra>"
+    )
+
+    fig_scatter.update_layout(
+        title={
+            'text': 'Prediction Accuracy Analysis',
+            'y': 0.95,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': dict(size=20, color='#1a237e')
+        },
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="center",
+            x=0.5,
+            bgcolor='rgba(255, 255, 255, 0.8)',
+            bordercolor='#E0E0E0',
+            borderwidth=1,
+            font=dict(size=12)
+        ),
+        margin=dict(l=60, r=30, t=100, b=50),
+        showlegend=True,
+        xaxis=dict(
+            title='Actual Energy Consumption (kWh)',
+            gridcolor='#EEEEEE',
+            showgrid=True,
+            zeroline=False,
+            title_font=dict(size=14, color='#424242'),
+            tickfont=dict(size=12)
+        ),
+        yaxis=dict(
+            title='Predicted Energy Consumption (kWh)',
+            gridcolor='#EEEEEE',
+            showgrid=True,
+            zeroline=False,
+            title_font=dict(size=14, color='#424242'),
+            tickfont=dict(size=12)
+        )
+    )
+    
+    # Display scatter plot
+    st.plotly_chart(fig_scatter, use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
         
             #with tab3:
                 #st.subheader("📈 Model Performance")
