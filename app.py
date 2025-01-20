@@ -27,77 +27,77 @@ TARGET_VARIABLE = 'total_energy'
 
 st.markdown("""
     <style>
-    .stApp {
-    background-color: #f0f2f6;
-    font-family: 'Roboto', sans-serif;
-}
+        .stApp {
+            background-color: #f0f2f6;
+            font-family: 'Roboto', sans-serif;
+            }
 
-.dashboard-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #1a237e;
-    text-align: center;
-    padding: 1.5rem 0;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
-}
+        .dashboard-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a237e;
+            text-align: center;
+            padding: 1.5rem 0;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            }
 
-.dashboard-subtitle {
-    font-size: 1.1rem;
-    color: #424242;
-    text-align: center;
-    margin-bottom: 2rem;
-}
+        .dashboard-subtitle {
+            font-size: 1.1rem;
+            color: #424242;
+            text-align: center;
+            margin-bottom: 2rem;
+            }
 
-h2, h3 {
-    font-family: 'Roboto', sans-serif;
-    color: #1a237e;
-    font-weight: 500;
-    padding: 1rem 0;
-}
+        h2, h3 {
+            font-family: 'Roboto', sans-serif;
+            color: #1a237e;
+            font-weight: 500;
+            padding: 1rem 0;
+            }
 
-.plot-container {
-    background-color: white;
-    padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin: 1rem 0;
-}
+        .plot-container {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 1rem 0;
+            }
 
-div[data-testid="metric-container"] {
-    background-color: white;
-    border: 1px solid #e0e0e0;
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
+        div[data-testid="metric-container"] {
+            background-color: white;
+            border: 1px solid #e0e0e0;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            }
 
-[data-testid="stFileUploader"] {
-    background-color: white;
-    padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+        [data-testid="stFileUploader"] {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
 
-.stTabs [data-baseweb="tab-list"] {
-    gap: 24px;
-    background-color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+        .stTabs [data-baseweb="tab-list"] {
+            gap: 24px;
+            background-color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
 
-.stTabs [data-baseweb="tab"] {
-    color: #424242;
-    font-weight: 500;
-}
+        .stTabs [data-baseweb="tab"] {
+            color: #424242;
+            font-weight: 500;
+            }
 
-.stTabs [aria-selected="true"] {
-    color: #1a237e;
-    border-bottom-color: #1a237e;
-}
+        .stTabs [aria-selected="true"] {
+            color: #1a237e;
+            border-bottom-color: #1a237e;
+            }
     </style>
 """, unsafe_allow_html=True)
 
