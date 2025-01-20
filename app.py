@@ -24,7 +24,6 @@ st.markdown("""
     
     /* Dashboard title styling */
     .dashboard-title {
-        font-family: 'Roboto', sans-serif;
         font-size: 2.5rem;
         font-weight: 700;
         color: #1a237e;
@@ -37,7 +36,6 @@ st.markdown("""
     }
     
     .dashboard-subtitle {
-        font-family: 'Roboto', sans-serif;
         font-size: 1.1rem;
         color: #424242;
         text-align: center;
