@@ -81,13 +81,6 @@ st.markdown("""
         color: #1a237e;
     }
     
-    /* File uploader styling */
-    [data-testid="stFileUploader"] {
-        background-color: white;
-        padding: 1.5rem;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
     
     /* Tab styling */
     .stTabs [data-baseweb="tab-list"] {
