@@ -51,7 +51,7 @@ if page == "Overview":
     with col3:
         st.info("📈 Evaluate model performance and accuracy")
 
-elif page == "Prediction of EV Energy Demand":
+elif page == "Make Predictions":
     st.title("Make Predictions")
     
     # Add file uploader
