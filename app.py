@@ -160,12 +160,12 @@ elif page == "Make Predictions":
     st.dataframe(sample_df)
     
     # Sample data description
-    st.write("""
+    #st.write("""
     ### Data Format Requirements:
-    - **Date**: Should be in YYYY-MM-DD format
-    - **Features**: All numeric values
-    - **Target**: The actual energy consumption values
-    """)
+    #- **Date**: Should be in YYYY-MM-DD format
+    #- **Features**: All numeric values
+    #- **Target**: The actual energy consumption values
+   # """)
     
     # Add download template button
     csv_template = convert_df_to_csv(sample_df)
