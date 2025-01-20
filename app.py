@@ -14,6 +14,7 @@ st.set_page_config(
 )
 
 # Define your features and target
+date_column = 'date' 
 features = ['total_ghg_savings', 'total_charging_sec', '7_rolling_avg', '30_rolling_avg', 'lag_1', 'lag_2', 'lag_3', 'lag_7', 'day_of_week', 'is_weekend', 'month'] 
 target_variable = 'total_energy'
 
