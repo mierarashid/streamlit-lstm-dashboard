@@ -82,7 +82,46 @@ if uploaded_file is not None:
                     default=[target_variable] if target_variable in numeric_cols else [numeric_cols[0]]
                 )
                 
-                fig_ts = px.line(input_df, x=date_column, y=selected_features)
+                #fig_ts = px.line(input_df, x=date_column, y=selected_features)
+                #st.plotly_chart(fig_ts, use_container_width=True)
+
+                fig_ts = px.line(input_df, 
+                    x=date_column, 
+                    y=selected_features,
+                    template='plotly_white',  # Cleaner template
+                    labels={'value': 'Energy Consumption (kWh)', 
+                            'date': 'Date',
+                            'variable': 'Features'},
+                    title='Time Series Analysis',
+                    color_discrete_map={
+                        'total_energy': '#1E88E5',
+                        'total_ghg_savings': '#FFC107',
+                        'total_charging_sec': '#4CAF50',
+                        '7_rolling_avg': '#FF5252',
+                        '30_rolling_avg': '#9C27B0'
+                    }
+                )
+    
+                # Update layout to match prediction plot style
+                fig_ts.update_layout(
+                    plot_bgcolor='white',
+                    title_x=0.5,  # Center the title
+                    title_font_size=20,
+                    legend=dict(
+                        orientation="h",
+                        yanchor="bottom",
+                        y=1.02,
+                        xanchor="right",
+                        x=1
+                    ),
+                    margin=dict(t=100),  # Add more top margin for the legend
+                    hovermode='x unified'
+                )
+    
+                # Update axes to match prediction plot style
+                fig_ts.update_xaxes(showgrid=True, gridwidth=1, gridcolor='#E0E0E0')
+                fig_ts.update_yaxes(showgrid=True, gridwidth=1, gridcolor='#E0E0E0')
+    
                 st.plotly_chart(fig_ts, use_container_width=True)
         
         with tab2:
