@@ -13,6 +13,10 @@ st.set_page_config(
     layout="wide"
 )
 
+# Define your features and target
+features = ['total_ghg_savings', 'total_charging_sec', '7_rolling_avg', '30_rolling_avg', 'lag_1', 'lag_2', 'lag_3', 'lag_7', 'day_of_week', 'is_weekend', 'month'] 
+target_variable = 'total_energy'
+
 # Load the saved model and scalers
 @st.cache_resource
 def load_saved_model():
@@ -29,48 +33,168 @@ st.sidebar.title("Navigation")
 page = st.sidebar.selectbox("Choose a page", ["Overview", "Make Predictions", "Model Performance", "Data Analysis"])
 
 if page == "Overview":
-    st.title("LSTM Model Dashboard")
-    st.write("Welcome to the LSTM Model Dashboard. This dashboard allows you to:")
+    st.title("EV Charging Sessions Prediction Dashboard")
+    st.write("""
+    This dashboard provides tools to predict the number of EV charging sessions based on historical data. 
+    The model takes into account various features including:
+    - GHG savings
+    - Charging duration
+    - Rolling averages
+    - Time-based patterns
+    """)
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.info("📊 Visualize Historical Data")
+        st.info("📊 Upload and analyze your historical charging data")
     with col2:
-        st.info("🔮 Make Real-time Predictions")
+        st.info("🔮 Get predictions for future charging sessions")
     with col3:
-        st.info("📈 Monitor Model Performance")
+        st.info("📈 Evaluate model performance and accuracy")
 
 elif page == "Make Predictions":
     st.title("Make Predictions")
     
-    # Create input fields for your features
-    st.subheader("Enter Feature Values")
+    # Add file uploader
+    st.subheader("Upload Your Data")
+    uploaded_file = st.file_uploader("Upload a CSV file", type=['csv'])
     
-    # Add input fields based on your features
-    input_data = {}
-    features = ['feature1', 'feature2', 'feature3']  # Replace with your actual features
+    if uploaded_file is not None:
+        try:
+            # Read the CSV file with date parsing
+            input_df = pd.read_csv(uploaded_file)
+            
+            # Convert date column to datetime if it exists
+            if date_column in input_df.columns:
+                input_df[date_column] = pd.to_datetime(input_df[date_column])
+                
+            # Show the uploaded data
+            st.subheader("Uploaded Data Preview")
+            st.dataframe(input_df.head())
+            
+            if st.button("Make Predictions"):
+                # Extract features for prediction (excluding date column)
+                features_df = input_df[features]
+                
+                # Scale the input data
+                input_scaled = X_scaler.transform(features_df)
+                
+                # Reshape for LSTM
+                input_lstm = input_scaled.reshape((input_scaled.shape[0], 1, input_scaled.shape[1]))
+                
+                # Make predictions
+                predictions = model.predict(input_lstm)
+                final_predictions = y_scaler.inverse_transform(predictions)
+                
+                # Create results dataframe with date
+                results_df = pd.DataFrame({
+                    'Date': input_df[date_column],
+                    'Actual': input_df[target_variable].values,
+                    'Predictions': final_predictions.flatten()
+                })
+                
+                # Display results
+                st.subheader("Predictions")
+                st.dataframe(results_df)
+                
+                # Download button for predictions
+                csv = results_df.to_csv(index=False)
+                st.download_button(
+                    label="Download Predictions",
+                    data=csv,
+                    file_name="predictions.csv",
+                    mime="text/csv"
+                )
+                
+                # Visualizations with dates
+                st.subheader("Actual vs Predicted Values Over Time")
+                # Time series plot
+                fig_time = px.line(results_df, 
+                                 x='Date',
+                                 y=['Actual', 'Predictions'],
+                                 title='Actual vs Predicted Values Over Time',
+                                 labels={'value': 'Energy Consumption', 
+                                        'variable': 'Type',
+                                        'Date': 'Date'},
+                                 template='plotly')
+                fig_time.update_layout(
+                    xaxis_title="Date",
+                    yaxis_title="Energy Consumption",
+                    legend_title="Type",
+                    hovermode='x unified'
+                )
+                st.plotly_chart(fig_time)
+
+                # Scatter plot
+                fig_scatter = px.scatter(results_df, 
+                                       x='Actual', 
+                                       y='Predictions',
+                                       title='Prediction Correlation',
+                                       labels={'Actual': 'Actual Values', 
+                                              'Predictions': 'Predicted Values'})
+                
+                # Add perfect prediction line
+                fig_scatter.add_trace(
+                    go.Scatter(x=[results_df['Actual'].min(), results_df['Actual'].max()],
+                              y=[results_df['Actual'].min(), results_df['Actual'].max()],
+                              mode='lines',
+                              name='Perfect Prediction',
+                              line=dict(dash='dash', color='red'))
+                )
+                st.plotly_chart(fig_scatter)
+
+        except Exception as e:
+            st.error(f"Error processing the file: {str(e)}")
+            st.write("Please make sure your CSV file has the following columns:")
+            st.write(f"Date column: {date_column}")
+            st.write("Feature columns:", ", ".join(features))
+            st.write(f"Target column: {target_variable}")
     
-    for feature in features:
-        input_data[feature] = st.number_input(f"Enter {feature}", value=0.0)
+    # Update template section
+    st.markdown("---")
+    st.subheader("CSV Template")
+    st.write("Your CSV should have the following columns:")
     
-    if st.button("Make Prediction"):
-        # Prepare input data
-        input_array = np.array(list(input_data.values())).reshape(1, -1)
-        scaled_data = X_scaler.transform(input_array)
-        lstm_input = scaled_data.reshape((1, 1, scaled_data.shape[1]))
-        
-        # Make prediction
-        prediction = model.predict(lstm_input)
-        final_prediction = y_scaler.inverse_transform(prediction)
-        
-        st.success(f"Predicted Value: {final_prediction[0][0]:.2f}")
-        
-        # Add confidence intervals or uncertainty visualization
-        st.plotly_chart(go.Figure(go.Indicator(
-            mode="gauge+number",
-            value=final_prediction[0][0],
-            gauge={'axis': {'range': [None, 100]}}
-        )))
+    # Create sample template with date
+    sample_df = pd.DataFrame(columns=[date_column] + features + [target_variable])
+    st.dataframe(sample_df)
+    
+    # Sample data description
+    st.write("""
+    ### Data Format Requirements:
+    - **Date**: Should be in YYYY-MM-DD format
+    - **Features**: All numeric values
+    - **Target**: The actual energy consumption values
+    """)
+    
+    # Add download template button
+    csv_template = convert_df_to_csv(sample_df)
+    st.download_button(
+        label="Download CSV Template",
+        data=csv_template,
+        file_name="template.csv",
+        mime="text/csv"
+    )
+    # Add example template
+    st.markdown("---")
+    st.subheader("CSV Template")
+    st.write("Your CSV should have the following columns:")
+    
+    # Create a sample dataframe with your features
+    sample_df = pd.DataFrame(columns=['feature1', 'feature2', 'feature3'])  # Replace with your actual features
+    st.dataframe(sample_df)
+    
+    # Add download template button
+    @st.cache_data
+    def convert_df_to_csv(df):
+        return df.to_csv(index=False)
+    
+    csv_template = convert_df_to_csv(sample_df)
+    st.download_button(
+        label="Download CSV Template",
+        data=csv_template,
+        file_name="template.csv",
+        mime="text/csv"
+    )
 
 elif page == "Model Performance":
     st.title("Model Performance Metrics")
