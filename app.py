@@ -51,7 +51,7 @@ if uploaded_file is not None:
             input_df[date_column] = pd.to_datetime(input_df[date_column])
         
         # Create tabs for different analyses
-        tab1, tab2, tab3 = st.tabs(["Data Analysis", "Predictions", "Model Performance"])
+        tab1, tab2 = st.tabs(["Data Analysis", "Predictions"])
         
         with tab1:
             st.subheader("📊 Data Analysis")
