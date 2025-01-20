@@ -15,6 +15,10 @@ st.set_page_config(
 
 st.markdown("""
     <style>
+    /* Main background and text colors */
+    .stApp {
+        background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);
+    }
 
     
     /* Upload section styling */
