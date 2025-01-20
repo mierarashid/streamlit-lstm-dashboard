@@ -6,6 +6,19 @@ import plotly.graph_objects as go
 from tensorflow.keras.models import load_model
 import joblib
 
+def setup_page():
+    """Configure the page settings and apply custom styling."""
+    st.set_page_config(
+        page_title="EV Energy Dashboard",
+        page_icon="📈",
+        layout="wide"
+    )
+    st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
+    st.markdown('<div class="dashboard-title">EV Energy Demand Analysis & Prediction Dashboard</div>', 
+                unsafe_allow_html=True)
+    st.markdown('<div class="dashboard-subtitle">This dashboard provides tools to analyze your EV charging data and predict future energy demand.</div>', 
+                unsafe_allow_html=True)
+
 # Constants
 DATE_COLUMN = 'date'
 FEATURES = ['total_ghg_savings', 'total_charging_sec', '7_rolling_avg', '30_rolling_avg',
@@ -87,18 +100,6 @@ CUSTOM_CSS = """
     }
 """
 
-def setup_page():
-    """Configure the page settings and apply custom styling."""
-    st.set_page_config(
-        page_title="EV Energy Dashboard",
-        page_icon="📈",
-        layout="wide"
-    )
-    st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
-    st.markdown('<div class="dashboard-title">EV Energy Demand Analysis & Prediction Dashboard</div>', 
-                unsafe_allow_html=True)
-    st.markdown('<div class="dashboard-subtitle">This dashboard provides tools to analyze your EV charging data and predict future energy demand.</div>', 
-                unsafe_allow_html=True)
 
 @st.cache_resource
 def load_saved_model():
