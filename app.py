@@ -155,7 +155,7 @@ elif page == "Make Predictions":
     st.write("Your CSV should have the following columns:")
     
     # Create sample template with date
-    sample_df = pd.DataFrame(columns=[date_column] + features + [target_variable])
+    sample_df = pd.DataFrame(columns=(date_column,) + tuple(features) + (target_variable,))
     st.dataframe(sample_df)
     
     # Sample data description
