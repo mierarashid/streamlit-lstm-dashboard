@@ -6,6 +6,13 @@ import plotly.graph_objects as go
 from tensorflow.keras.models import load_model
 import joblib
 
+# Page config
+st.set_page_config(
+    page_title="LSTM Model Dashboard",
+    page_icon="📈",
+    layout="wide"
+)
+
 # Load the saved model and scalers
 @st.cache_resource
 def load_saved_model():
@@ -16,13 +23,6 @@ def load_saved_model():
 
 # Load model and scalers
 model, X_scaler, y_scaler = load_saved_model()
-
-# Page config
-st.set_page_config(
-    page_title="LSTM Model Dashboard",
-    page_icon="📈",
-    layout="wide"
-)
 
 # Sidebar
 st.sidebar.title("Navigation")
