@@ -112,7 +112,7 @@ model, X_scaler, y_scaler = load_saved_model()
 
 # Wrap the upload section in a styled div
 st.markdown('<div class="upload-section">', unsafe_allow_html=True)
-st.subheader("📤 Upload Your Data")
+st.subheader("Upload Your Data")
 uploaded_file = st.file_uploader("Upload a CSV file", type=['csv'])
 st.markdown('</div>', unsafe_allow_html=True)
 
