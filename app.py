@@ -158,7 +158,12 @@ elif page == "Make Predictions":
     # Create sample template with date
     sample_df = pd.DataFrame(columns=(date_column,) + tuple(features) + (target_variable,))
     st.dataframe(sample_df)
-    
+
+    # First, define the conversion function
+    @st.cache_data
+    def convert_df_to_csv(df):
+        return df.to_csv(index=False)
+        
     # Sample data description
     #st.write("""
     ### Data Format Requirements:
@@ -167,7 +172,7 @@ elif page == "Make Predictions":
     #- **Target**: The actual energy consumption values
    # """)
     
-    # Add download template button
+    # Then use the function
     csv_template = convert_df_to_csv(sample_df)
     st.download_button(
         label="Download CSV Template",
