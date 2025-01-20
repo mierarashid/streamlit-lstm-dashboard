@@ -15,18 +15,6 @@ st.set_page_config(
 
 st.markdown("""
     <style>
-    /* Main background and text colors */
-    .stApp {
-        background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);
-    }
-    
-        .main-title {
-        color: #1E293B;
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-    }
-
 
     
     /* Upload section styling */
