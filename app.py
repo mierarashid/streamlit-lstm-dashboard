@@ -50,15 +50,7 @@ st.markdown("""
         padding: 1rem 0;
     }
     
-    /* Card styling for content sections */
-    .content-card {
-        background-color: white;
-        padding: 2rem;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        margin-bottom: 2rem;
-    }
-    
+
     /* Plot container styling */
     .plot-container {
         background-color: white;
