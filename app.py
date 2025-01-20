@@ -52,7 +52,7 @@ if page == "Overview":
         st.info("📈 Evaluate model performance and accuracy")
 
 elif page == "Make Predictions":
-    st.title("Make Predictions")
+    st.title("Prediction of EV Energy Demand")
     
     # Add file uploader
     st.subheader("Upload Your Data")
