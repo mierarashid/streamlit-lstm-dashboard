@@ -6,6 +6,87 @@ import plotly.graph_objects as go
 from tensorflow.keras.models import load_model
 import joblib
 
+# Constants
+DATE_COLUMN = 'date'
+FEATURES = ['total_ghg_savings', 'total_charging_sec', '7_rolling_avg', '30_rolling_avg',
+           'lag_1', 'lag_2', 'lag_3', 'lag_7', 'day_of_week', 'is_weekend', 'month']
+TARGET_VARIABLE = 'total_energy'
+
+# Custom CSS
+CUSTOM_CSS = """
+    .stApp {
+        background-color: #f0f2f6;
+        font-family: 'Roboto', sans-serif;
+    }
+    
+    .dashboard-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1a237e;
+        text-align: center;
+        padding: 1.5rem 0;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+    
+    .dashboard-subtitle {
+        font-size: 1.1rem;
+        color: #424242;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    h2, h3 {
+        font-family: 'Roboto', sans-serif;
+        color: #1a237e;
+        font-weight: 500;
+        padding: 1rem 0;
+    }
+    
+    .plot-container {
+        background-color: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 1rem 0;
+    }
+    
+    div[data-testid="metric-container"] {
+        background-color: white;
+        border: 1px solid #e0e0e0;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    [data-testid="stFileUploader"] {
+        background-color: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 24px;
+        background-color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        color: #424242;
+        font-weight: 500;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        color: #1a237e;
+        border-bottom-color: #1a237e;
+    }
+"""
+
 # Must be the first Streamlit command
 st.set_page_config(
     page_title="EV Energy Dashboard",
@@ -13,101 +94,8 @@ st.set_page_config(
     layout="wide"
 )
 
-def setup_page():
-    """Configure the page settings and apply custom styling."""
-    st.set_page_config(
-        page_title="EV Energy Dashboard",
-        page_icon="📈",
-        layout="wide"
-    )
-    st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
-    st.markdown('<div class="dashboard-title">EV Energy Demand Analysis & Prediction Dashboard</div>', 
-                unsafe_allow_html=True)
-    st.markdown('<div class="dashboard-subtitle">This dashboard provides tools to analyze your EV charging data and predict future energy demand.</div>', 
-                unsafe_allow_html=True)
-
-# Constants
-DATE_COLUMN = 'date'
-FEATURES = ['total_ghg_savings', 'total_charging_sec', '7_rolling_avg', '30_rolling_avg',
-           'lag_1', 'lag_2', 'lag_3', 'lag_7', 'day_of_week', 'is_weekend', 'month']
-TARGET_VARIABLE = 'total_energy'
-
-st.markdown("""
-    <style>
-        .stApp {
-            background-color: #f0f2f6;
-            font-family: 'Roboto', sans-serif;
-            }
-
-        .dashboard-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #1a237e;
-            text-align: center;
-            padding: 1.5rem 0;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-            }
-
-        .dashboard-subtitle {
-            font-size: 1.1rem;
-            color: #424242;
-            text-align: center;
-            margin-bottom: 2rem;
-            }
-
-        h2, h3 {
-            font-family: 'Roboto', sans-serif;
-            color: #1a237e;
-            font-weight: 500;
-            padding: 1rem 0;
-            }
-
-        .plot-container {
-            background-color: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin: 1rem 0;
-            }
-
-        div[data-testid="metric-container"] {
-            background-color: white;
-            border: 1px solid #e0e0e0;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            }
-
-        [data-testid="stFileUploader"] {
-            background-color: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-
-        .stTabs [data-baseweb="tab-list"] {
-            gap: 24px;
-            background-color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-
-        .stTabs [data-baseweb="tab"] {
-            color: #424242;
-            font-weight: 500;
-            }
-
-        .stTabs [aria-selected="true"] {
-            color: #1a237e;
-            border-bottom-color: #1a237e;
-            }
-    </style>
-""", unsafe_allow_html=True)
-
+# Apply CSS after page config
+st.markdown(f"<style>{CUSTOM_CSS}</style>", unsafe_allow_html=True)
 
 @st.cache_resource
 def load_saved_model():
@@ -226,6 +214,13 @@ def create_prediction_plots(results_df):
     )
     
     return fig_time, fig_scatter
+
+def setup_page():
+    """Configure the page display elements."""
+    st.markdown('<div class="dashboard-title">EV Energy Demand Analysis & Prediction Dashboard</div>', 
+                unsafe_allow_html=True)
+    st.markdown('<div class="dashboard-subtitle">This dashboard provides tools to analyze your EV charging data and predict future energy demand.</div>', 
+                unsafe_allow_html=True)
 
 def main():
     setup_page()
