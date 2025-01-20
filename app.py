@@ -47,11 +47,11 @@ if page == "Overview":
     with col1:
         st.info("📊 Upload and analyze your historical charging data")
     with col2:
-        st.info("🔮 Get predictions for future charging sessions")
+        st.info("🔮 Get predictions for future energy demand")
     with col3:
         st.info("📈 Evaluate model performance and accuracy")
 
-elif page == "Make Predictions":
+elif page == "Prediction of EV Energy Demand":
     st.title("Make Predictions")
     
     # Add file uploader
