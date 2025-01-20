@@ -20,15 +20,6 @@ st.markdown("""
         background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);
     }
     
-    /* Header styling */
-    .main-header {
-        background: white;
-        padding: 2rem;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        margin-bottom: 2rem;
-    }
-    
     .main-title {
         color: #1E293B;
         font-size: 2.5rem;
@@ -88,11 +79,6 @@ st.markdown("""
         border: none;
         box-shadow: 0 2px 4px rgba(37,99,235,0.2);
         transition: all 0.2s ease;
-    }
-    
-    .stButton > button:hover {
-        background-color: #1E40AF;
-        box-shadow: 0 4px 6px rgba(37,99,235,0.3);
     }
     
     /* File uploader styling */
