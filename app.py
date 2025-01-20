@@ -6,34 +6,12 @@ import plotly.graph_objects as go
 from tensorflow.keras.models import load_model
 import joblib
 
-st.set_page_config(page_title="EV Energy Dashboard", layout="wide", initial_sidebar_state="expanded")
-
-# Add custom CSS for better styling
-st.markdown("""
-    <style>
-    .main-header {
-        font-size: 2.5rem;
-        font-weight: 600;
-        color: #1E88E5;
-        padding: 1rem 0;
-    }
-    .sub-header {
-        color: #424242;
-        font-size: 1.1rem;
-        padding-bottom: 2rem;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-st.markdown('<p class="main-header">EV Energy Demand Analysis & Prediction Dashboard</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-header">This dashboard provides tools to analyze your EV charging data and predict future energy demand.</p>', unsafe_allow_html=True)
-
 # Page config
-#st.set_page_config(
-    #page_title="LSTM Model Dashboard",
-    #page_icon="📈",
-    #layout="wide"
-#)
+st.set_page_config(
+    page_title="EV Energy Dashboard",
+    page_icon="📈",
+    layout="wide"
+)
 
 # Define your features and target
 date_column = 'date' 
