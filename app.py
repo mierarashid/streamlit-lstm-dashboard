@@ -38,7 +38,7 @@ Upload your data below to get started.
 """)
 
 # File upload section
-st.subheader("📤 Upload Your Data")
+st.subheader("Upload Your Data")
 uploaded_file = st.file_uploader("Upload a CSV file", type=['csv'])
 
 if uploaded_file is not None:
