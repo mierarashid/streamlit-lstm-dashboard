@@ -169,7 +169,7 @@ if uploaded_file is not None:
                 if 'results_df' in st.session_state:
                     # Calculate performance metrics
                     mae = np.mean(np.abs(st.session_state.results_df['Actual'] - st.session_state.results_df['Predicted']))
-                    mse = np.mean((st.session_state.results_df['Actual'] - st.session_state.results_df['Predicted'])**2)
+                    rmse = np.sqrt(np.mean((st.session_state.results_df['Actual'] - st.session_state.results_df['Predicted'])**2))
                     r2 = 1 - (np.sum((st.session_state.results_df['Actual'] - st.session_state.results_df['Predicted'])**2) / 
                          np.sum((st.session_state.results_df['Actual'] - np.mean(st.session_state.results_df['Actual']))**2))
         
@@ -178,7 +178,7 @@ if uploaded_file is not None:
                     with col1:
                         st.metric("Mean Absolute Error", f"{mae:.3f}")
                     with col2:
-                        st.metric("Mean Squared Error", f"{mse:.3f}")
+                        st.metric("Root Mean Squared Error", f"{rmse:.3f}")
                     with col3:
                         st.metric("R² Score", f"{r2:.3f}")
         
