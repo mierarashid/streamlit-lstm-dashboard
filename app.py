@@ -101,7 +101,7 @@ if uploaded_file is not None:
                 y_scaler.fit(y_data)  # Add this line to fit the scaler
         
                 # Reshape for LSTM
-                input_lstm = input_scaled.reshape((input_scaled.shape[0], 1, input_scaled.shape[1])))
+                input_lstm = input_scaled.reshape((input_scaled.shape[0], 1, input_scaled.shape[1]))
                 
                 # Make predictions
                 predictions = model.predict(input_lstm)
